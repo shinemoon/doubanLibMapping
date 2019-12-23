@@ -9,11 +9,12 @@ import progressbar
 """
     Config 
 """
-wishOwner = "claud.xiao"
-#wishOwner = "156943655"
+#wishOwner = "claud.xiao"
+wishOwner = "156943655"
 searchHeader = "http://my1.hzlib.net/opac/search?&q="
 searchRail = "&searchWay=isbn&sortWay=score&sortOrder=desc&scWay=dim&searchSource=reader"
-validSites=['网易蜗牛读书馆','文献借阅中心','浣纱馆外借']
+validSites=['网易蜗牛读书馆','文献借阅中心','浣纱馆外借','西湖图书馆']
+
 
 
 gurl = 'http://book.douban.com/people/'+wishOwner+'/wish'
@@ -90,7 +91,8 @@ with progressbar.ProgressBar(max_value=len(blist)) as bar:
         bar.update(i)
 
 print("=======================")
-print(" Checking Libary ")
+print(" Checking Libary in: ")
+print(validSites)
 print("=======================")
 
 #http://my1.hzlib.net/opac/search;jsessionid=52BF0FA6791BFB1B1BEE7D49341B5086?&q=9787540493363&searchWay=isbn&sortWay=score&sortOrder=desc&scWay=dim&searchSource=reader
@@ -129,26 +131,33 @@ def fetchBook(addr):
                 pass
     return locinfo
 bkinfos = []    
-for bk in bkdetails:
-    bookname = bk[0]
-    bookloc  = []
 
-    ISBN=bk[2]
-    # ISBN
-    if(ISBN!="N/A"):
-        pageaddr = searchHeader+ISBN+searchRail
-        bookloc = fetchBook(pageaddr)
-    # Book Title
-    else:
-        bookloc = []
-    bkinfos.append([bookname, bookloc])
+with progressbar.ProgressBar(max_value=len(bkdetails)) as bar:
+    i=0
+    for bk in bkdetails:
+        i = i + 1
+        bookname = bk[0]
+        bookloc  = []
+    
+        ISBN=bk[2]
+        # ISBN
+        if(ISBN!="N/A"):
+            pageaddr = searchHeader+ISBN+searchRail
+            bookloc = fetchBook(pageaddr)
+        # Book Title
+        else:
+            bookloc = []
+        bkinfos.append([bookname, bookloc])
+        bar.update(i)
 
 # Show Book Rec and Lib Info
 print("")
 print("")
+nobook = []
 for bk in bkinfos:
     if(len(bk[1])==0):
         #print("无在馆信息")    
+        nobook.append(bk[0])
         continue
     else:
         print("|> 书名:《"+ bk[0] +"》")    
@@ -160,3 +169,13 @@ for bk in bkinfos:
             print("#  所在地:  "+ lib[2])    
             print("#  可出借数量:  %d"%(lib[3]))
         print("")
+print("=========================================")
+print("")
+print("一共有%d本书没有图书馆记录"%(len(nobook)))
+print("")
+print("=========================================")
+bstr=""
+for b in nobook:
+    bstr=bstr+"|"+b
+
+print(bstr)

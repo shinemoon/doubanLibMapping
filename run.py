@@ -13,7 +13,9 @@ import progressbar
 wishOwner = "156943655"
 searchHeader = "http://my1.hzlib.net/opac/search?&q="
 searchRail = "&searchWay=isbn&sortWay=score&sortOrder=desc&scWay=dim&searchSource=reader"
-validSites=['网易蜗牛读书馆','文献借阅中心','浣纱馆外借','西湖图书馆']
+#validSites=['网易蜗牛读书馆','文献借阅中心','浣纱馆外借','西湖图书馆']
+validSites=['西湖图书馆']
+printoutcnt = False
 
 
 
@@ -154,6 +156,7 @@ with progressbar.ProgressBar(max_value=len(bkdetails)) as bar:
 print("")
 print("")
 nobook = []
+outcnt = 0
 for bk in bkinfos:
     if(len(bk[1])==0):
         #print("无在馆信息")    
@@ -164,14 +167,23 @@ for bk in bkinfos:
         print("   在馆信息:")    
     for libs in bk[1]:
         for lib in libs:
-            print("")
-            print("#  借书号:  "+ lib[0])    
-            print("#  所在地:  "+ lib[2])    
-            print("#  可出借数量:  %d"%(lib[3]))
+            if(lib[3]>0):
+                print("")
+                print("#  借书号:  "+ lib[0])    
+                print("#  所在地:  "+ lib[2])    
+                print("#  可出借数量:  %d"%(lib[3]))
+            else:
+                if(printoutcnt):
+                    print("")
+                    print("#  借书号:  "+ lib[0])    
+                    print("#  所在地:  "+ lib[2])    
+                    print("#  可出借数量:  %d"%(lib[3]))
+                outcnt=outcnt+1
         print("")
 print("=========================================")
 print("")
 print("一共有%d本书没有图书馆记录"%(len(nobook)))
+print("有%d本书有记录但是被借光了"%(len(outcnt)))
 print("")
 print("=========================================")
 bstr=""

@@ -9,13 +9,13 @@ import progressbar
 """
     Config 
 """
-wishOwner = "claud.xiao"
-#wishOwner = "156943655"
+#wishOwner = "claud.xiao"
+wishOwner = "156943655" 
 searchHeader = "http://my1.hzlib.net/opac/search?&q="
 searchRail = "&searchWay=isbn&sortWay=score&sortOrder=desc&scWay=dim&searchSource=reader"
-validSites=['文献借阅中心']
+#validSites=['文献借阅中心']
 #validSites=['网易蜗牛读书馆','文献借阅中心','浣纱馆外借','西湖图书馆']
-#validSites=['西湖图书馆']
+validSites=['西湖图书馆']
 printoutcnt = False
 
 

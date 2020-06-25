@@ -4,7 +4,7 @@
 ### 依赖：
 - beautifulsoup4==4.9.1 (pip install bs4)
 - requests==2.24.0
-- progressbar2==3.51.3 (** Important: pip install progressbar2 **)
+- progressbar2==3.51.3 (**Important: pip install progressbar2**)
 
 ### 使用：
 

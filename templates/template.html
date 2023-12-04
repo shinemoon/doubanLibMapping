@@ -1,0 +1,69 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    {% block head %}
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+   <!-- 必须的 meta 标签 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"> 
+
+    <title>{% block title %}借书单{% endblock %}</title>
+    <!-- CSS -->
+    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.6.2/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <!-- jQuery and JavaScript Bundle with Popper -->
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.slim.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.6.2/js/bootstrap.bundle.min.js" integrity="sha384-7ymO4nGrkm372HoSbq1OY2DP4pEZnMiA+E0F3zPr+JQQtQ82gQ1HPY3QIVtztVua" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" type="text/css" href="index.css">
+    <link rel="icon" type="image/x-icon" href="/icon.png">
+
+    {% endblock %}
+</head>
+<body>
+
+<div class="container">
+    {% block content %}
+    <div class="row bookitem th">
+    <div class="col-2  bkname">
+        书名
+    </div>
+    <div class="col  bkloc">
+        所在馆
+    </div>
+    <div class="col  bkid">
+        借书号
+    </div>
+    <div class="col  bookcnt">
+        数量
+    </div>
+    </div>
+
+    {% for book in bklist.booklist %}
+    {% if book.bookinfo.num == 0 %}
+    <div class="row bookitem nobook">
+    {% else %}
+    <div class="row bookitem wbook">
+    {% endif %}
+    <div class="col-2  bkname">
+        <a href={{book.dblink}}>{{ book.name}}</a>
+    </div>
+    <div class="col  bkloc">
+     {{ book.bookinfo.loc}}
+    </div>
+    <div class="col  bkid">
+     {{ book.bookinfo.ID}}
+    </div>
+    <div class="col  bookcnt">
+     {{ book.bookinfo.num}}
+    </div>
+    </div>
+    {% endfor %}
+    {% endblock %}
+</div>
+    <div id="footer">
+        {% block footer %}
+        &copy; Copyright 2008 by Claud .
+        {% endblock %}
+    </div>
+
+  </body>
+</html>
+</body>

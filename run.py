@@ -23,8 +23,9 @@ wishOwner = "claud.xiao"
 #wishOwner = "156943655" 
 searchHeader = "http://my1.hzlib.net/opac/search?&q="
 searchRail = "&searchWay=isbn&sortWay=score&sortOrder=desc&scWay=dim&searchSource=reader"
-validSites=['文献借阅中心']
 #validSites=['网易蜗牛读书馆','文献借阅中心','浣纱馆外借','西湖图书馆']
+#validSites=['文献借阅中心']
+validSites=['文献借阅中心','浣纱馆外借','西湖图书馆']
 #validSites=['西湖图书馆']
 printoutcnt = False
 
@@ -178,12 +179,11 @@ libinfo  = {}
 booklist = []
 
 for bk in bkinfos:
-    curbk = {}
-    curbk['name'] = bk['title']
-    curbk['dblink'] = bk['dblink']
-    curbk['bookinfo'] = {}
-
     if(len(bk['loc'])==0):
+        curbk = {}
+        curbk['name'] = bk['title']
+        curbk['dblink'] = bk['dblink']
+        curbk['bookinfo'] ={}
         #cprint("无在馆信息")    
         nobook.append(curbk)
         continue
@@ -192,6 +192,9 @@ for bk in bkinfos:
         cprint("   在馆信息:")    
         for libs in bk['loc']:
             for lib in libs:
+                curbk = {}
+                curbk['name'] = bk['title']
+                curbk['dblink'] = bk['dblink']
                 curbk['bookinfo'] ={
                         'ID':lib['callno'],
                         'loc':lib['curlocalName'],
@@ -209,9 +212,7 @@ for bk in bkinfos:
                         cprint("#  所在地:  "+ lib['curlocalName'])    
                         cprint("#  可出借数量:  %d"%(lib['loanableCount']))
                     outcnt=outcnt+1
-            cprint("")
-        booklist.append(curbk)
-
+                booklist.append(curbk)
 booklist = sorted(booklist, key=lambda x: x['bookinfo']['num'],reverse=True)
 
 libinfo['booklist'] = booklist

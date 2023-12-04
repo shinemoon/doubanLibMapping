@@ -21,19 +21,29 @@
 
 <div class="container">
     {% block content %}
+    <div class="row headline">
+        <div class="col ">
+            图书馆已有清单
+        </div>
+   </div>
+    <div class="row headlineinfo">
+        <div class="col timeinfo">
+            {{bklist.timestamp}}
+        </div>
+   </div>
     <div class="row bookitem th">
-    <div class="col-2  bkname">
-        书名
-    </div>
-    <div class="col  bkloc">
-        所在馆
-    </div>
-    <div class="col  bkid">
-        借书号
-    </div>
-    <div class="col  bookcnt">
-        数量
-    </div>
+        <div class="col-4  bkname">
+            书名
+        </div>
+        <div class="col-3  bkloc">
+            所在馆
+        </div>
+        <div class="col-3  bkid">
+            借书号
+        </div>
+        <div class="col-2  bookcnt">
+            数量
+        </div>
     </div>
 
     {% for book in bklist.booklist %}
@@ -42,28 +52,53 @@
     {% else %}
     <div class="row bookitem wbook">
     {% endif %}
-    <div class="col-2  bkname">
-        <a href={{book.dblink}}>{{ book.name}}</a>
+        <div class="col-4  bkname">
+            <a href={{book.dblink}}>{{ book.name}}</a>
+        </div>
+        <div class="col-3  bkloc">
+         {{ book.bookinfo.loc}}
+        </div>
+        <div class="col-3  bkid">
+         {{ book.bookinfo.ID}}
+        </div>
+        <div class="col-2  bookcnt">
+         {{ book.bookinfo.num}}
+        </div>
     </div>
-    <div class="col  bkloc">
-     {{ book.bookinfo.loc}}
+    {% endfor %}
+
+    <div class="row headline">
+        <div class="col ">
+            无图书馆记录清单
+        </div>
     </div>
-    <div class="col  bkid">
-     {{ book.bookinfo.ID}}
-    </div>
-    <div class="col  bookcnt">
-     {{ book.bookinfo.num}}
-    </div>
+
+    {% for book in bklist.nobooklist %}
+    <div class="row bookitem norecord">
+        <div class="col-4  bkname">
+            <a href={{book.dblink}}>{{ book.name}}</a>
+        </div>
+        <div class="col-3  bkloc">
+            -
+        </div>
+        <div class="col-3  bkid">
+            -
+        </div>
+        <div class="col-2  bookcnt">
+            -
+        </div>
+
     </div>
     {% endfor %}
     {% endblock %}
-</div>
-    <div id="footer">
+    <div id="footer" class="row">
+        <div class="col ">
         {% block footer %}
-        &copy; Copyright 2008 by Claud .
+        &copy; Copyright 2023 by Claud@Douban
         {% endblock %}
+        </div>
     </div>
-
+</div>
   </body>
 </html>
 </body>

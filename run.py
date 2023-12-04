@@ -185,7 +185,7 @@ for bk in bkinfos:
 
     if(len(bk['loc'])==0):
         #cprint("无在馆信息")    
-        nobook.append(bk['title'])
+        nobook.append(curbk)
         continue
     else:
         cprint("|> 书名:《"+ bk['title'] +"》")    
@@ -216,6 +216,7 @@ booklist = sorted(booklist, key=lambda x: x['bookinfo']['num'],reverse=True)
 
 libinfo['booklist'] = booklist
 libinfo['nobooklist'] = nobook
+libinfo['timestamp']=time.asctime()
 
 cprint(libinfo)
 
@@ -237,6 +238,6 @@ cprint("=========================================")
 
 bstr=""
 for b in nobook:
-    bstr=bstr+"|"+b
+    bstr=bstr+"|"+b['name']
 cprint(bstr)
 

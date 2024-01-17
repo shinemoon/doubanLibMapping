@@ -11,7 +11,9 @@ import argparse
 from jinja2 import FileSystemLoader,Environment
 env = Environment(loader=FileSystemLoader('templates'))
 
-debugPrint=True
+debugPrint=False
+fetchGap = 10 # Douban
+fetchGapLib = 2 # Lib
 
 def cprint(str):
     global debugPrint
@@ -97,7 +99,7 @@ if __name__=='__main__':
         for pg in plist:
             i = i + 1
             gurl = 'http://book.douban.com/'+pg
-            time.sleep(2)
+            time.sleep(fetchGap)
             html = requests.get(url=gurl,headers={'User-Agent': user_agent}).content
             soup = BeautifulSoup(html, 'html.parser', from_encoding='utf-8')
             for bk in soup.select('.subject-item .info h2  a'):
@@ -118,7 +120,7 @@ if __name__=='__main__':
             i=i+1
             gurl = bks['url']
             cprint('\n'+gurl)
-            time.sleep(5)
+            time.sleep(fetchGap)
             html = requests.get(url=gurl,headers={'User-Agent': user_agent}).content
             cprint(html)
             soup = BeautifulSoup(html, 'html.parser', from_encoding='utf-8')
@@ -151,7 +153,7 @@ if __name__=='__main__':
     #http://my1.hzlib.net/opac/search;jsessionid=52BF0FA6791BFB1B1BEE7D49341B5086?&q=9787540493363&searchWay=isbn&sortWay=score&sortOrder=desc&scWay=dim&searchSource=reader
     
     def fetchBook(addr):
-        time.sleep(2)
+        time.sleep(fetchGapLib)
         html = requests.get(url=addr,headers={'User-Agent': user_agent}).content
         soup = BeautifulSoup(html, 'html.parser', from_encoding='utf-8')
         #import pdb
@@ -168,7 +170,7 @@ if __name__=='__main__':
             for j in bid:
                 try:
                     preaddr = "http://my1.hzlib.net/opac/book/holdingPreviews?bookrecnos="+j+"&curLibcodes=&return_fmt=json"
-                    time.sleep(2)
+                    time.sleep(fetchGapLib)
                     html = requests.get(url=preaddr,headers={'User-Agent': user_agent}).content
                     import json
                     rec=json.loads(html)['previews'][j]

@@ -5,15 +5,17 @@ import requests
 import re
 import time 
 import progressbar
+import sys
+import pickle
 
 import argparse
 
 from jinja2 import FileSystemLoader,Environment
 env = Environment(loader=FileSystemLoader('templates'))
 
-debugPrint=False
-fetchGap = 10 # Douban
-fetchGapLib = 2 # Lib
+debugPrint=True
+fetchGap = 5 # Douban/ISBN
+fetchGapLib = 5 # Lib
 
 def cprint(str):
     global debugPrint
@@ -21,12 +23,25 @@ def cprint(str):
         print(str);
     pass
 
+# Store an object to a file
+def save_object(obj, filename):
+    with open(filename, 'wb') as file:
+        pickle.dump(obj, file)
+
+# Restore an object from a file
+def load_object(filename):
+    with open(filename, 'rb') as file:
+        obj = pickle.load(file)
+    return obj
+
 if __name__=='__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("userid", help="Douban ID")
+    parser.add_argument("-t", "--type", default="all",help="Work type")
     args = parser.parse_args()
 
     userId= args.userid
+    workType = args.type
 
 
     """
@@ -87,7 +102,7 @@ if __name__=='__main__':
     # Current page as home
     blist =[]
     for bk in soup.select('.subject-item .info h2 a'):
-        blist.append({'title':bk.get('title'),'url':bk.get('href')})
+        blist.append({'title':bk.get('title'),'url':bk.get('href'), 'status':'new', 'isbnsearch':'https://isbnsearch.org/search?s='+bk.get('title')})
     
     
     cprint("=======================")
@@ -106,7 +121,12 @@ if __name__=='__main__':
                 blist.append({'title':bk.get('title'),'url':bk.get('href')})
             bar.update(i)
     
-    
+   
+    #Let's save the blist into offline file
+    save_object(blist,'blist_'+userId)
+
+    #sys.exit() 
+   
     cprint("=======================")
     cprint(" Fetching Book Details")
     cprint("=======================")
@@ -119,10 +139,11 @@ if __name__=='__main__':
         for bks in blist:
             i=i+1
             gurl = bks['url']
+#            gurl = bks['isbnsearch']
             cprint('\n'+gurl)
             time.sleep(fetchGap)
+            # Considering to fetch via DoubanAPI!
             html = requests.get(url=gurl,headers={'User-Agent': user_agent}).content
-            cprint(html)
             soup = BeautifulSoup(html, 'html.parser', from_encoding='utf-8')
             infos = soup.find(id='info')
             rawt = infos.text
@@ -268,6 +289,8 @@ if __name__=='__main__':
     with open('bookList.html', 'w') as output_file:
         output_file.write(rendered_html)
     
+    with open('bookList_'+userId+'.html', 'w') as output_file:
+        output_file.write(rendered_html)
     
     cprint("=========================================")
     cprint("")

@@ -8,7 +8,7 @@
 
 ### 使用：
 
-`python3 run.py`
+`python3 run.py userid`
 
 使用前自行修改想读用户的用户id，以及相应的图书馆分馆地址
 
